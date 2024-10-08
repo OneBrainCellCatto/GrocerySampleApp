@@ -1,0 +1,125 @@
+﻿@using Grocery.ViewModels.EmployeeVM
+@model EmployeeSearchViewModel
+
+@{
+    ViewData["Title"] = "List of Employees";
+}
+
+<h1>Employees</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<form asp-controller="Employee" asp-action="Index" method="get">
+    <p>
+        <div>
+            <select asp-for="CivilStatusFilter" asp-items="Model.CivilStatuses">
+                <option value="">All</option>
+            </select>
+        </div>
+        <div>
+            <select asp-for="PositionFilter" asp-items="Model.Positions">
+                <option value="">All</option>
+            </select>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                Currently Employed
+                <input class="form-check-input" asp-for="CurrentlyEmployed"/>
+            </label>
+        </div>
+        <label>Title: <input type="text" name="searchString"/></label>
+        <input type="submit" value="Search"/>
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Employees![0].FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employees![0].MiddleName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employees![0].LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employees![0].Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employees![0].BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employees![0].DateHired)
+            </th>
+            
+                @if (!Model.CurrentlyEmployed)
+                {
+                <th>
+                    @Html.DisplayNameFor(model => model.Employees![0].DateResigned)
+                </th>
+                }
+            
+            <th>
+                @Html.DisplayNameFor(model => model.Employees![0].CivilStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Employees![0].Position)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Employees!) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MiddleName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender.GenderName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateHired)
+            </td>
+                @if (!Model.CurrentlyEmployed)
+                {
+                    @if(item.CurrentlyEmployed == false)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateResigned)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+
+                        </td>
+                    }
+                }
+                
+            <td>
+                @Html.DisplayFor(modelItem => item.CivilStatus.CivilStatusName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position.PositionName)
+            </td>
+            <td>
+                <a asp-controller="Employee" asp-action="Edit" asp-route-id="@item.EmployeeId">Edit</a> |
+                <a asp-controller="Employee"  asp-action="Details" asp-route-id="@item.EmployeeId">Details</a> |
+                <a asp-controller="Employee" asp-action="Delete" asp-route-id="@item.EmployeeId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
